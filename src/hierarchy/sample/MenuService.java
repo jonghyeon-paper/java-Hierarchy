@@ -22,7 +22,7 @@ public class MenuService {
 				for (int j = menuList.size() - 2; j > -1; j--) {
 					Menu target = menuList.get(j);
 					if (target.getMenuId().equals(temporary.getParentMenuId())) {
-						target.getChildMenu().add(temporary);
+						target.addChildMenu(temporary);
 						break;
 					}
 				}
