@@ -2,9 +2,10 @@ package hierarchy.sample2;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
+import java.util.Queue;
 
 /**
  * 'MENU'라는 객체를 계층구조화 하는 샘플
@@ -26,8 +27,8 @@ public class MenuService {
 		
 		// 계층 구조를 찾아가기 위한 맵
 		//- 위에서 아래로 찾아가는 top > down구조로 정의됨.
-		//- stack데이터로 top > down으로 데이터를 넣고, top > down으로 데이터를 꺼낸다.
-		Map<Integer, Stack<Integer>> hierarchyMap = new HashMap<>();
+		//- queue데이터로 top > down으로 데이터를 넣고, top > down으로 데이터를 꺼낸다.
+		Map<Integer, Queue<Integer>> hierarchyMap = new HashMap<>();
 		
 		// 최상위 메뉴 등록
 		//- 더미 객체에 최상위 레벨의 메뉴를 자식으로 추가한다.
@@ -37,15 +38,15 @@ public class MenuService {
 				// 하위에 등록한다.
 				dummyTop.addChildMenu(item);
 				
+				// 계층 구조를 맵에 추가한다.
+				//- 1레벨
+				Queue<Integer> temp = new LinkedList<>();
+				temp.add(item.getMenuId());
+				hierarchyMap.put(item.getMenuId(), temp);
+				
 				// 사용 된 데이터는 list에서 제거한다.
 				menuList.remove(i);
 				i--;
-				
-				// 계층 구조를 맵에 추가한다.
-				//- 1레벨
-				Stack<Integer> temp = new Stack<>();
-				temp.push(item.getMenuId());
-				hierarchyMap.put(item.getMenuId(), temp);
 			}
 		}
 		
@@ -65,13 +66,13 @@ public class MenuService {
 					
 					// 계층 구조를 맵에 추가한다.
 					//- n레벨
-					Stack<Integer> newHierarchyMap = (Stack<Integer>) hierarchyMap.get(parentId).clone();
-					newHierarchyMap.push(item.getMenuId());
+					Queue<Integer> newHierarchyMap = new LinkedList<>(hierarchyMap.get(parentId)); // 새 인스턴스
+					newHierarchyMap.add(item.getMenuId());
 					hierarchyMap.put(item.getMenuId(), newHierarchyMap);
 					
 					// 하위에 등록한다.
 					//- n레벨의 부모를 찾아가기 위해 재귀호출한다.
-					Stack<Integer> parentHierarchyMap = (Stack<Integer>) hierarchyMap.get(parentId).clone();
+					Queue<Integer> parentHierarchyMap = new LinkedList<>(hierarchyMap.get(parentId)); // 새 인스턴스
 					findObjectAndAdd(item, parentHierarchyMap, dummyTop.getChildMenu());
 					
 					//사용 된 데이터는 list에서 제거한다.
@@ -92,9 +93,9 @@ public class MenuService {
 	 * @param hierarchyMap - 계층 구조맵
 	 * @param list - 대상 목록
 	 */
-	private static void findObjectAndAdd(Menu targetItem, Stack<Integer> hierarchyMap, List<Menu> list) {
+	private static void findObjectAndAdd(Menu targetItem, Queue<Integer> hierarchyMap, List<Menu> list) {
 		// 계층 구조맵에서 맨 위의 값을 꺼낸다.
-		Integer findMenuId = hierarchyMap.pop();
+		Integer findMenuId = hierarchyMap.poll();
 		Menu parentMenu = null;
 		
 		// 대상 목록에서 일치하는 대상을 찾는다.
@@ -105,7 +106,7 @@ public class MenuService {
 		}
 		
 		if (parentMenu != null) {
-			if (hierarchyMap.empty()) {
+			if (hierarchyMap.size() == 0) {
 				// 계층 구조맵이 없다면 대상 오브젝트를 하위에 추가한다.
 				parentMenu.addChildMenu(targetItem);
 			} else {

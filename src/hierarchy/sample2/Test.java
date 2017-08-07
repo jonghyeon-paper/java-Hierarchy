@@ -12,6 +12,7 @@ public class Test {
 		List<Menu> list = new ArrayList<>();
 		list.add(new Menu(3, 1, "menu3", 2));
 		list.add(new Menu(4, 1, "menu4", 1));
+		list.add(new Menu(9, 5, "menu9", 1));
 		list.add(new Menu(5, 2, "menu5", 1));
 		list.add(new Menu(6, 2, "menu6", 3));
 		list.add(new Menu(7, 2, "menu7", 2));
@@ -31,6 +32,7 @@ public class Test {
 		 * ├ menu8
 		 * └ menu2
 		 *   ├ menu5
+		 *   │ └ menu9
 		 *   ├ menu7
 		 *   └ menu6
 		 */
