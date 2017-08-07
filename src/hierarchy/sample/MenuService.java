@@ -42,8 +42,14 @@ public class MenuService {
 				// recursive
 				sortMenuHierarchy(menuList.get(i));
 				
+				if (menuList.get(i).getDisplayOrder() == null) {
+					continue;
+				}
 				int lowestValueIndex = i;
 				for (int j = i + 1; j < menuList.size(); j++) {
+					if (menuList.get(j).getDisplayOrder() == null) {
+						continue;
+					}
 					if (menuList.get(j).getDisplayOrder() < menuList.get(lowestValueIndex).getDisplayOrder()) {
 						lowestValueIndex = j;
 					}

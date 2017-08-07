@@ -42,8 +42,14 @@ public class HierarchyService implements HierarchyConcept<HierarchyObject> {
 				// recursive
 				sortInternalObject(itemList.get(i));
 				
+				if (itemList.get(i).getDisplayOrder() == null) {
+					continue;
+				}
 				int lowestValueIndex = i;
 				for (int j = i + 1; j < itemList.size(); j++) {
+					if (itemList.get(j).getDisplayOrder() == null) {
+						continue;
+					}
 					if (itemList.get(j).getDisplayOrder() < itemList.get(lowestValueIndex).getDisplayOrder()) {
 						lowestValueIndex = j;
 					}
