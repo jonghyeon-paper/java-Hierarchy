@@ -51,9 +51,12 @@ public class MenuService {
 		}
 		
 		// 하위 메뉴 등록
-		//- 
 		//- list의 값이 존재하면 반복해서 실행된다.
-		while (menuList.size() > 0) {
+		//- 마지막 루프 사이즈값이 목록의 사이즈보다 크면 반복 실행한다.(부모가 없는 경우 무한루프)
+		int lastLoopSize = menuList.size() + 1;
+		while (menuList.size() > 0 && menuList.size() < lastLoopSize) {
+			lastLoopSize = menuList.size();
+			
 			for (int i = 0; i < menuList.size() ; i++) {
 				Menu item = menuList.get(i);
 				
